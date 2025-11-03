@@ -1,5 +1,5 @@
 {
-  "name": "Copy of AI Flash Card Generator",
+  "name": "Flash Card Generator",
   "description": "An intelligent web application that takes any text or paragraph and automatically generates interactive flash cards to enhance your learning experience.",
   "requestFramePermissions": []
 }
