@@ -1,0 +1,46 @@
+<header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <div class="flex-shrink-0">
+        <a href="#" class="flex items-center space-x-2">
+          <svg class="h-8 w-8 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375v-4.5a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5c0-.621.504-1.125 1.125-1.125H10.5a3.375 3.375 0 0 0 3.375-3.375V5.25" />
+          </svg>
+          <span class="text-2xl font-bold text-gray-900">FlashGen AI</span>
+        </a>
+      </div>
+      <nav class="hidden md:flex items-center space-x-8">
+        <a (click)="scrollTo('home')" class="text-gray-600 hover:text-indigo-600 font-medium cursor-pointer transition-colors">Home</a>
+        <a (click)="scrollTo('examples')" class="text-gray-600 hover:text-indigo-600 font-medium cursor-pointer transition-colors">Examples</a>
+        <a (click)="scrollTo('about')" class="text-gray-600 hover:text-indigo-600 font-medium cursor-pointer transition-colors">About</a>
+      </nav>
+      <div class="hidden md:block">
+        <a (click)="scrollTo('generator')" class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 cursor-pointer transition-all duration-300 ease-in-out transform hover:scale-105">
+          Get Started
+        </a>
+      </div>
+      <div class="md:hidden">
+        <button (click)="toggleMenu()" class="text-gray-600 hover:text-indigo-600">
+          <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            @if (!isMenuOpen()) {
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7" />
+            } @else {
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            }
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    @if (isMenuOpen()) {
+      <div class="md:hidden py-4">
+        <a (click)="scrollTo('home')" class="block py-2 px-4 text-sm text-gray-600 hover:bg-gray-100 cursor-pointer">Home</a>
+        <a (click)="scrollTo('examples')" class="block py-2 px-4 text-sm text-gray-600 hover:bg-gray-100 cursor-pointer">Examples</a>
+        <a (click)="scrollTo('about')" class="block py-2 px-4 text-sm text-gray-600 hover:bg-gray-100 cursor-pointer">About</a>
+        <a (click)="scrollTo('generator')" class="block w-full text-left mt-2 py-2 px-4 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md cursor-pointer transition-all duration-300 ease-in-out transform hover:scale-105">
+          Get Started
+        </a>
+      </div>
+    }
+  </div>
+</header>

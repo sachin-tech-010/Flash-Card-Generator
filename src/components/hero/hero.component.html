@@ -1,0 +1,27 @@
+<section id="home" class="relative bg-gradient-to-br from-indigo-600 to-purple-600 text-white overflow-hidden">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32">
+    <div class="text-center">
+      <h1 class="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl animate-fade-in-up">
+        Transform Any Text Into <span class="block">Interactive Flash Cards</span>
+      </h1>
+      <p class="mt-6 max-w-2xl mx-auto text-lg sm:text-xl text-indigo-100 animate-fade-in-up" style="animation-delay: 0.2s;">
+        Paste your notes, articles, or study materials, and let our AI create concise, effective flash cards to supercharge your learning.
+      </p>
+      <div class="mt-10 max-w-sm mx-auto sm:max-w-none sm:flex sm:justify-center animate-fade-in-up" style="animation-delay: 0.4s;">
+        <button (click)="scrollToGenerator()" class="w-full sm:w-auto px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-indigo-50 transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl shadow-lg">
+          Generate Now
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="absolute bottom-10 left-1/2 -translate-x-1/2">
+    <button (click)="scrollToGenerator()" aria-label="Scroll down" class="animate-bounce cursor-pointer text-white/70 hover:text-white transition-colors duration-300">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+      </svg>
+    </button>
+  </div>
+  
+  <div class="absolute inset-0 bg-black opacity-10"></div>
+</section>

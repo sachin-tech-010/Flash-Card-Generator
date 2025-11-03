@@ -1,0 +1,58 @@
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="text-center">
+    <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">See It in Action</h2>
+    <p class="mt-4 text-lg text-gray-500">
+      Check out how our AI turns complex topics into simple, flippable flash cards.
+    </p>
+  </div>
+  
+  <div class="mt-12">
+    <!-- Topic Selector Buttons -->
+    <div class="flex justify-center flex-wrap gap-2 sm:gap-4 mb-8">
+      @for (example of examples(); track example.topic; let i = $index) {
+        <button
+          (click)="selectTopic(i)"
+          [class.bg-indigo-600]="currentTopicIndex() === i"
+          [class.text-white]="currentTopicIndex() === i"
+          [class.bg-white]="currentTopicIndex() !== i"
+          [class.text-indigo-600]="currentTopicIndex() !== i"
+          class="px-4 py-2 text-sm font-semibold rounded-full shadow-sm border border-indigo-600 transition-colors duration-300 hover:bg-indigo-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        >
+          {{ example.topic }}
+        </button>
+      }
+    </div>
+
+    @let example = currentExample();
+    <div class="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
+      <h3 class="text-xl font-bold text-gray-800">{{ example.topic }}</h3>
+      <p class="mt-2 text-gray-600 italic">"{{ example.paragraph }}"</p>
+    </div>
+
+    <div class="mt-8 flex items-center justify-center space-x-4">
+      <button (click)="prevCard()" class="p-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-600 transition-all duration-300 transform hover:scale-110">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+      </button>
+
+      <div class="w-full max-w-lg h-64 transition-transform duration-300 transform hover:scale-[1.02]">
+        @let card = currentCard();
+        <div (click)="flipCard()" [class.flipped]="isFlipped()" class="flip-card w-full h-full cursor-pointer">
+          <div class="flip-card-inner rounded-xl shadow-2xl">
+            <div class="flip-card-front bg-gradient-to-br from-white to-gray-100 border border-gray-200 rounded-xl">
+              <p class="text-2xl font-semibold text-gray-800">{{ card.question }}</p>
+            </div>
+            <div class="flip-card-back bg-gradient-to-br from-indigo-500 to-purple-500 text-white rounded-xl">
+              <p class="text-2xl font-semibold">{{ card.answer }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <button (click)="nextCard()" class="p-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-600 transition-all duration-300 transform hover:scale-110">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+      </button>
+    </div>
+
+    <div class="text-center mt-4 text-sm text-gray-500">Click card to flip. Use arrows to cycle through cards for this topic.</div>
+  </div>
+</div>

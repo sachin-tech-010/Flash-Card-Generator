@@ -1,0 +1,130 @@
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="text-center">
+    <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">Create Your Flash Cards</h2>
+    <p class="mt-4 text-lg text-gray-500">
+      Paste your text below and let the AI do the heavy lifting.
+    </p>
+  </div>
+
+  <div class="mt-12">
+    <div class="bg-white p-6 sm:p-8 rounded-xl shadow-lg border border-gray-200 min-h-[300px] flex flex-col justify-center">
+      @if (step() !== 'results') {
+        <textarea
+          [(ngModel)]="inputText"
+          rows="10"
+          class="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow"
+          placeholder="Paste your article, notes, or any text here..."
+          [disabled]="isLoading() || step() === 'options'"
+        ></textarea>
+      } @else {
+         <div class="w-full p-4 border border-gray-200 rounded-lg bg-gray-50 max-h-48 overflow-y-auto">
+          <p class="text-sm text-gray-700 whitespace-pre-wrap">{{ inputText() }}</p>
+        </div>
+      }
+      <div class="mt-6">
+        @if (step() === 'initial' || step() === 'analyzing') {
+          <button
+            (click)="analyzeText()"
+            [disabled]="isLoading() || inputText().trim().length === 0"
+            class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-300 ease-in-out transform hover:scale-105"
+          >
+            @if (isAnalyzing()) {
+              <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <span>Analyzing...</span>
+            } @else {
+              <span>Analyze Text</span>
+            }
+          </button>
+        }
+
+        @if (step() === 'options') {
+          <div class="animate-fade-in-up opacity-0">
+            <p class="text-center font-medium text-gray-700 mb-4">How many flash cards would you like to generate?</p>
+            <div class="flex justify-center flex-wrap gap-4">
+              @for (count of cardCountOptions(); track count) {
+                <button
+                  (click)="generateCards(count)"
+                  class="px-6 py-2 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 transition-all duration-300 ease-in-out transform hover:scale-105"
+                >
+                  {{ count }} Cards
+                </button>
+              }
+            </div>
+            <div class="text-center mt-6">
+              <button (click)="backToEdit()" class="text-sm text-gray-600 hover:text-indigo-600 underline">Edit Text</button>
+            </div>
+          </div>
+        }
+        
+        @if (isGenerating()) {
+           <div class="flex items-center justify-center flex-col text-center p-4 animate-fade-in-up opacity-0">
+              <svg class="animate-spin h-8 w-8 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <p class="mt-4 font-medium text-gray-700">Generating your flash cards...</p>
+              <p class="text-sm text-gray-500">This may take a few moments.</p>
+           </div>
+        }
+
+        @if (step() === 'results' && cardCountOptions().length > 0) {
+          <div class="animate-fade-in-up opacity-0">
+            <p class="text-center font-medium text-gray-700 mb-4">Or, generate a different number of cards:</p>
+            <div class="flex justify-center flex-wrap gap-4">
+              @for (count of cardCountOptions(); track count) {
+                <button
+                  (click)="generateCards(count)"
+                  [disabled]="isGenerating()"
+                  [class.bg-indigo-600]="selectedCardCount() !== count"
+                  [class.text-white]="selectedCardCount() !== count"
+                  [class.hover:bg-indigo-700]="selectedCardCount() !== count"
+                  [class.bg-indigo-100]="selectedCardCount() === count"
+                  [class.text-indigo-700]="selectedCardCount() === count"
+                  [class.font-semibold]="selectedCardCount() === count"
+                  [class.cursor-default]="selectedCardCount() === count"
+                  class="px-6 py-2 border border-transparent text-base font-medium rounded-md transition-all duration-300 ease-in-out transform hover:scale-105 disabled:opacity-50"
+                >
+                  {{ count }} Cards
+                </button>
+              }
+            </div>
+            <div class="text-center mt-6">
+              <button (click)="reset()" class="w-full sm:w-auto text-sm font-medium text-indigo-600 hover:text-indigo-800">Start New</button>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  @if (error()) {
+    <div class="mt-8 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md" role="alert">
+      <p class="font-bold">Error</p>
+      <p>{{ error() }}</p>
+    </div>
+  }
+
+  @if (step() === 'results' && generatedCards().length > 0) {
+    <div class="mt-12">
+      <h3 class="text-2xl font-bold text-center">Your Flash Cards</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
+        @for (card of generatedCards(); track $index) {
+          <div (click)="flipCard($index)" [class.flipped]="flippedCardIndex() === $index" class="flip-card h-64 cursor-pointer">
+            <div class="flip-card-inner rounded-xl shadow-lg">
+              <div class="flip-card-front bg-white border border-gray-200 rounded-xl">
+                <p class="text-lg font-medium text-gray-800">{{ card.question }}</p>
+              </div>
+              <div class="flip-card-back bg-indigo-600 text-white rounded-xl">
+                <p class="text-lg font-medium">{{ card.answer }}</p>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+      <p class="text-center mt-4 text-gray-500 text-sm">Click any card to flip it over.</p>
+    </div>
+  }
+</div>
