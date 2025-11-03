@@ -14,13 +14,27 @@ export class GeminiService {
   private ai: GoogleGenAI | null = null;
 
   constructor() {
-    // IMPORTANT: This relies on `process.env.API_KEY` being set by a build tool or deployment platform like Netlify.
-    const apiKey = (typeof process !== 'undefined' && process.env) ? process.env.API_KEY : undefined;
+    // IMPORTANT: This relies on `process.env.API_KEY` being set in the environment.
+    const apiKey = process.env.API_KEY;
     if (apiKey) {
       this.ai = new GoogleGenAI({ apiKey });
     } else {
-      console.error('API_KEY environment variable not set or not accessible in this client-side context.');
+      console.error('API_KEY environment variable not set.');
     }
+  }
+
+  private handleApiError(error: unknown): never {
+    console.error('Gemini API Error:', error);
+    if (error instanceof TypeError && error.message.toLowerCase().includes('failed to fetch')) {
+      throw new Error('Could not connect to the AI service. This may be due to a network issue or a browser extension (like an ad-blocker) blocking the request. Please check your connection and try disabling your ad-blocker for this site.');
+    }
+    if (error instanceof Error && error.message.includes('API key not valid')) {
+       throw new Error('The AI service API key is not valid. Please check the configuration.');
+    }
+    if (error instanceof Error) {
+       throw new Error(`An error occurred: ${error.message}`);
+    }
+    throw new Error('An unknown error occurred while communicating with the AI service.');
   }
 
   async analyzeTextForCardCount(text: string): Promise<CardCountRange> {
@@ -68,8 +82,7 @@ Provide your answer as a JSON object with 'min' and 'max' keys.`;
       return parsed;
 
     } catch (error) {
-      console.error('Error analyzing text for card count:', error);
-      throw new Error('Failed to analyze text. Please try again.');
+      this.handleApiError(error);
     }
   }
 
@@ -125,8 +138,7 @@ Generate the ${cardCount} flash cards now.`;
       return parsed.flashcards || [];
 
     } catch (error) {
-      console.error('Error generating flash cards:', error);
-      throw new Error('Failed to generate flash cards. Please try again.');
+      this.handleApiError(error);
     }
   }
 }
