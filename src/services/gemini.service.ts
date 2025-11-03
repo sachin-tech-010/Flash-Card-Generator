@@ -14,12 +14,12 @@ export class GeminiService {
   private ai: GoogleGenAI | null = null;
 
   constructor() {
-    // IMPORTANT: This relies on `process.env.API_KEY` being set in the environment.
-    const apiKey = process.env.API_KEY;
+    // IMPORTANT: This relies on `process.env.API_KEY` being set by a build tool or deployment platform like Netlify.
+    const apiKey = (typeof process !== 'undefined' && process.env) ? process.env.API_KEY : undefined;
     if (apiKey) {
       this.ai = new GoogleGenAI({ apiKey });
     } else {
-      console.error('API_KEY environment variable not set.');
+      console.error('API_KEY environment variable not set or not accessible in this client-side context.');
     }
   }
 
